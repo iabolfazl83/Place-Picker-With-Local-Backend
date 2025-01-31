@@ -1,8 +1,8 @@
 import Places from './Places.jsx';
 import {useEffect, useState} from "react";
 import Error from "./Error.jsx";
-import {sortPlacesByDistance} from "../loc.js";
 import {fetchAvailablePlaces} from "../http.js";
+import {sortPlacesByDistance} from "../loc.js";
 
 export default function AvailablePlaces({onSelectPlace}) {
   const [availablePlaces, setAvailablePlaces] = useState([]);
@@ -15,14 +15,19 @@ export default function AvailablePlaces({onSelectPlace}) {
 
       try {
         const places = await fetchAvailablePlaces();
-        navigator.geolocation.getCurrentPosition(position => {
-          const sortedPlaces = sortPlacesByDistance(
-            places,
-            position.coords.latitude,
-            position.coords.longitude);
-          setAvailablePlaces(sortedPlaces);
-          setIsFetching(false);
-        });
+
+        //google api is not blocked in Iran, you can uncomment this codes to enable the user location permission granting;
+
+        // navigator.geolocation.getCurrentPosition(position => {
+        //   const sortedPlaces = sortPlacesByDistance(
+        //     places,
+        //     position.coords.latitude,
+        //     position.coords.longitude);
+
+        // and change the "places" under this line to "sortedPlaces";
+        setAvailablePlaces(places);
+        setIsFetching(false);
+        // });
 
       } catch (error) {
         setError({message: error.message || 'Could not fetch places please try again later.'});
